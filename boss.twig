@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>热搜|抖音</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css'>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-7895795513180477",
+    enable_page_level_ads: true
+  });
+</script>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-145084080-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-145084080-1');
+</script>
+
+<style type="text/css">
+	html {
+  height: 100%;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  font-family: Avenir;
+}
+
+.userRanking a {
+  color: black;
+  text-decoration: none;
+}
+.userRanking a:hover {
+  background-color: #f5f5f5;
+}
+
+.dailyUserRanking-title {
+  height: 30px;
+  margin-bottom: 15px;
+}
+.dailyUserRanking-title span {
+  font-size: 28px;
+}
+.dailyUserRanking-title .dailyUserRanking-heading {
+  display: inline-block;
+  line-height: 30px;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.userRanking-list {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-content: space-between;
+  width: 1040px;
+  height: 400px;
+}
+
+.userRanking-item a {
+  display: flex;
+  align-items: center;
+  width: 345px;
+  height: 40px;
+  border-top: solid 1px #ccc;
+  border-bottom: solid 1px #ccc;
+  box-sizing: border-box;
+  margin-bottom: -1px;
+}
+.userRanking-item:nth-child(-n+3) .userRanking-item-rank {
+  background-color: #c00;
+}
+
+.userRanking-item-rank {
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  line-height: 30px;
+  font-size: 13px;
+  color: white;
+  background-color: black;
+}
+
+.userRanking-item-thumb {
+  margin-left: 8px;
+}
+.userRanking-item-thumb img {
+  width: 24px;
+  height: 24px;
+}
+
+.userRanking-item-name {
+  margin-left: 8px;
+  font-size: 13px;
+}
+
+.userRanking-item-view {
+  margin-left: auto;
+}
+.userRanking-item-view .userRanking-item-view-title {
+  display: inline-block;
+  font-size: 10px;
+}
+.userRanking-item-view .userRanking-item-view-number {
+  display: inline-block;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.dailyUserRanking-more {
+  display: flex;
+  align-items: center;
+  width: 55px;
+  height: 22px;
+  margin-top: 20px;
+  margin-left: auto;
+  background-color: black;
+}
+.dailyUserRanking-more:hover {
+  background-color: #333;
+}
+.dailyUserRanking-more span {
+  margin-left: 8px;
+  font-size: 2px;
+  color: white;
+}
+.dailyUserRanking-more p {
+  margin-left: 6px;
+  font-size: 12px;
+  color: white;
+}
+</style>
+</head>
+<body>
+<!-- partial:index.partial.html -->
+
+<div class="dailyUserRanking">
+  <div class="dailyUserRanking-title"><span class="fa fa-arrow-up"></span>
+    <h3 class="dailyUserRanking-heading">Daily user ranking</h3>
+  </div>
+  <div class="dailyUserRanking-content">
+    <div class="userRanking">
+      <ul class="userRanking-list">
+      	{% for item in data %}
+        <li class="userRanking-item">
+        	<a href="#">
+        	<span class="userRanking-item-rank">{{ loop.index }}</span>
+            <p class="userRanking-item-name">{{ item.keywords }}</p>
+            <div class="userRanking-item-view">
+              <p class="userRanking-item-view-title">view</p>
+              <p class="userRanking-item-view-number">{{item.searchNums}}</p>
+            </div>
+        	</a>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <!-- <a class="dailyUserRanking-more" href="http://example.com"><span class="fa fa-caret-right"></span><p>More</p></a> -->
+</div>
+<!-- partial -->
+  
+</body>
+</html>

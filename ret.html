@@ -1,0 +1,556 @@
+<!doctype html>
+<html>
+
+<head>
+  <title>转发数据统计</title>
+  <meta charset="UTF-8">
+  <meta name="keywords" content="粉丝统计,银教授,阿信,蔡徐坤">
+  <!-- <script type="text/javascript" src="https://tajs.qq.com/stats?sId=66395045" charset="UTF-8"></script> -->
+  <script src="./Chart.min.js"></script>
+  <script type="text/javascript">
+    'use strict';
+window.chartColors = {
+  red: 'rgb(255, 99, 132)',
+  orange: 'rgb(255, 159, 64)',
+  yellow: 'rgb(255, 205, 86)',
+  green: 'rgb(75, 192, 192)',
+  blue: 'rgb(54, 162, 235)',
+  purple: 'rgb(153, 102, 255)',
+  black: 'rgb(44, 52, 75)',
+  grey: 'rgb(201, 203, 207)'
+};
+
+(function(global) {
+  var MONTHS = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December'
+  ];
+
+  var COLORS = [
+    '#4dc9f6',
+    '#f67019',
+    '#f53794',
+    '#537bc4',
+    '#acc236',
+    '#166a8f',
+    '#00a950',
+    '#58595b',
+    '#8549ba'
+  ];
+
+  var Samples = global.Samples || (global.Samples = {});
+  var Color = global.Color;
+
+  Samples.utils = {
+    // Adapted from http://indiegamr.com/generate-repeatable-random-numbers-in-js/
+    srand: function(seed) {
+      this._seed = seed;
+    },
+
+    rand: function(min, max) {
+      var seed = this._seed;
+      min = min === undefined ? 0 : min;
+      max = max === undefined ? 1 : max;
+      this._seed = (seed * 9301 + 49297) % 233280;
+      return min + (this._seed / 233280) * (max - min);
+    },
+
+    numbers: function(config) {
+      var cfg = config || {};
+      var min = cfg.min || 0;
+      var max = cfg.max || 1;
+      var from = cfg.from || [];
+      var count = cfg.count || 8;
+      var decimals = cfg.decimals || 8;
+      var continuity = cfg.continuity || 1;
+      var dfactor = Math.pow(10, decimals) || 0;
+      var data = [];
+      var i, value;
+
+      for (i = 0; i < count; ++i) {
+        value = (from[i] || 0) + this.rand(min, max);
+        if (this.rand() <= continuity) {
+          data.push(Math.round(dfactor * value) / dfactor);
+        } else {
+          data.push(null);
+        }
+      }
+
+      return data;
+    },
+
+    labels: function(config) {
+      var cfg = config || {};
+      var min = cfg.min || 0;
+      var max = cfg.max || 100;
+      var count = cfg.count || 8;
+      var step = (max - min) / count;
+      var decimals = cfg.decimals || 8;
+      var dfactor = Math.pow(10, decimals) || 0;
+      var prefix = cfg.prefix || '';
+      var values = [];
+      var i;
+
+      for (i = min; i < max; i += step) {
+        values.push(prefix + Math.round(dfactor * i) / dfactor);
+      }
+
+      return values;
+    },
+
+    months: function(config) {
+      var cfg = config || {};
+      var count = cfg.count || 12;
+      var section = cfg.section;
+      var values = [];
+      var i, value;
+
+      for (i = 0; i < count; ++i) {
+        value = MONTHS[Math.ceil(i) % 12];
+        values.push(value.substring(0, section));
+      }
+
+      return values;
+    },
+
+    color: function(index) {
+      return COLORS[index % COLORS.length];
+    },
+
+    transparentize: function(color, opacity) {
+      var alpha = opacity === undefined ? 0.5 : 1 - opacity;
+      return Color(color).alpha(alpha).rgbString();
+    }
+  };
+
+  // DEPRECATED
+  window.randomScalingFactor = function() {
+    return Math.round(Samples.utils.rand(-100, 100));
+  };
+
+  // INITIALIZATION
+
+  Samples.utils.srand(Date.now());
+
+ 
+
+}(this));
+  </script>
+</head>
+
+<body>
+
+  <div id="container" style="width: 600px;">
+    <canvas id="canvas"></canvas>
+  </div>
+  <div style="width: 600px;">
+    <canvas id="canvas1"></canvas>
+  </div>
+  <div style="width: 600px;">
+    <canvas id="canvaspie"></canvas>
+  </div>
+  <div style="width: 600px;">
+    <canvas id="canvaspiefollow"></canvas>
+  </div>
+ <div style="width: 600px;">
+    <canvas id="canvaspie_yjs"></canvas>
+  </div>
+  <div style="width: 600px;">
+    <canvas id="canvaspiefollow_yjs"></canvas>
+  </div>
+  <div style="width: 600px;">
+    <canvas id="canvaspie_ys"></canvas>
+  </div>
+  <div style="width: 600px;">
+    <canvas id="canvaspiefollow_ys"></canvas>
+  </div>
+  <div style="width: 600px;">
+    <canvas id="canvaspie_kk"></canvas>
+  </div>
+  <div style="width: 600px;">
+    <canvas id="canvaspiefollow_kk"></canvas>
+  </div>
+  <h3>数据取自下面四条微博</h3>
+  <div id="container" style="width: 600px;">
+    <img src="1.png" width="600px">
+    <img src="2.png" width="600px">
+    <img src="3.png" width="600px">
+    <img src="4.png" width="600px">
+  </div>
+  <script>
+    var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    var color = Chart.helpers.color;
+    var barChartData = {
+      labels: ['蔡徐坤', '银教授', '阿信', '央视新闻'],
+      datasets: [{
+        label: '女',
+        backgroundColor: color(window.chartColors.red).alpha(0.5).rgbString(),
+        borderColor: window.chartColors.red,
+        borderWidth: 1,
+        data: [
+          57,83,74,52
+        ]
+      }, 
+      {
+        label: '男',
+        backgroundColor: color(window.chartColors.blue).alpha(1).rgbString(),
+        borderColor: window.chartColors.blue,
+        borderWidth: 1,
+        data: [
+          43,17,26,48
+        ]
+      }]
+    };
+    // 转发客户端
+    var barChartDatar = {
+      labels: ['蔡徐坤', '银教授', '阿信', '央视新闻'],
+      datasets: [{
+        label: 'vivo',
+        backgroundColor: color(window.chartColors.red).alpha(0.5).rgbString(),
+        borderColor: window.chartColors.red,
+        borderWidth: 1,
+        data: [
+          29,5,4,6
+        ]
+      }, 
+      {
+        label: 'xiaomi',
+        backgroundColor: color(window.chartColors.blue).alpha(1).rgbString(),
+        borderColor: window.chartColors.blue,
+        borderWidth: 1,
+        data: [
+          9,5,5,8
+        ]
+      }, 
+      {
+        label: '华为',
+        backgroundColor: color(window.chartColors.orange).alpha(1).rgbString(),
+        borderColor: window.chartColors.blue,
+        borderWidth: 1,
+        data: [
+          12,10,13,21
+        ]
+      }, 
+      {
+        label: '三星',
+        backgroundColor: color(window.chartColors.purple).alpha(1).rgbString(),
+        borderColor: window.chartColors.blue,
+        borderWidth: 1,
+        data: [
+          1,1,1,2
+        ]
+      }, 
+      {
+        label: 'iphone',
+        backgroundColor: color(window.chartColors.yellow).alpha(1).rgbString(),
+        borderColor: window.chartColors.blue,
+        borderWidth: 1,
+        data: [
+          23,51,56,38
+        ]
+      }, 
+      {
+        label: '其他',
+        backgroundColor: color(window.chartColors.green).alpha(1).rgbString(),
+        borderColor: window.chartColors.blue,
+        borderWidth: 1,
+        data: [
+          12,22,16,20
+        ]
+      }, 
+      {
+        label: 'oppo',
+        backgroundColor: color(window.chartColors.grey).alpha(1).rgbString(),
+        borderColor: window.chartColors.blue,
+        borderWidth: 1,
+        data: [
+          14,6,5,5
+        ]
+      }
+      ]
+    };
+
+    var presets = window.chartColors;
+    var utils = Samples.utils;
+    var inputs = {
+      min: 8,
+      max: 16,
+      count: 8,
+      decimals: 2,
+      continuity: 1
+    };
+
+
+    //utils.srand(42);
+    var data = {
+      labels: ["vivo", "xiaomi", "华为", "三星", "iphone", "其他", "oppo", "魅族"],//generateLabels(),
+      datasets: [{
+        backgroundColor: utils.transparentize(presets.red),
+        borderColor: presets.red,
+        data: [5,5,11,2,52,22,7,1],
+        label: '银教授'
+      }, {
+        backgroundColor: utils.transparentize(presets.orange),
+        borderColor: presets.orange,
+        data: [5,5,13,2,56,16,6,2],
+        label: '阿信',
+        fill: '-1'
+      }, {
+        backgroundColor: utils.transparentize(presets.blue),
+        borderColor: presets.blue,
+        data: [6,8,22,3,38,20,6,1],
+        label: '央视新闻',
+        fill: '-1'
+      }, {
+        backgroundColor: utils.transparentize(presets.purple),
+        borderColor: presets.purple,
+        data: [29,9,12,1,23,13,15,1],
+        label: '蔡徐坤',
+        fill: '-1'
+      }]
+    };
+var colorset =[
+            window.chartColors.red,window.chartColors.orange,window.chartColors.yellow,window.chartColors.green,window.chartColors.blue,
+          ]
+var  pielabels = ['30以下','30-80','80-150','150-300','300以上']
+    
+var config = {
+      type: 'pie',
+      data: {
+        datasets: [{
+          data: [
+            172,327,416,479,756,
+          ],
+          backgroundColor: colorset,
+          label: 'Dataset 1'
+        }],
+        labels: pielabels
+      },
+      options: {
+        responsive: true,
+        title: {
+            display: true,
+            text: '阿信转发人粉丝数区间'
+          }
+      }
+    };
+var config_1 = {
+      type: 'pie',
+      data: {
+        datasets: [{
+          data: [
+            172,327,416,479,756,
+          ],
+          backgroundColor: colorset,
+          label: 'Dataset 1'
+        }],
+        labels: pielabels
+      },
+      options: {
+        responsive: true,
+        title: {
+            display: true,
+            text: '阿信转发人粉丝数区间'
+          }
+      }
+    };
+
+    
+
+    window.onload = function() {
+      var ctx = document.getElementById('canvaspie').getContext('2d');
+      window.myPie = new Chart(ctx, config);
+      var ctx1 = document.getElementById('canvaspiefollow').getContext('2d');
+      //var config_1 = config
+      config_1.options.title.text = '阿信转发人关注数区间'
+      config_1.data.datasets[0].data = [73,214,287,633,943]
+      window.myPie1 = new Chart(ctx1, config_1);
+      console.log(config,config_1)
+      var ctx2 = document.getElementById('canvaspie_yjs').getContext('2d');
+      window.myPie2 = new Chart(ctx2, {
+      type: 'pie',
+      data: {
+        datasets: [{
+          data: [
+            58,144,166,188,266
+          ],
+          backgroundColor: colorset,
+          label: 'Dataset 1'
+        }],
+        labels: pielabels
+      },
+      options: {
+        responsive: true,
+        title: {
+            display: true,
+            text: '银教授转发人粉丝数区间'
+          }
+      }
+    });
+      var ctx2 = document.getElementById('canvaspiefollow_yjs').getContext('2d');
+      window.myPie2 = new Chart(ctx2, {
+      type: 'pie',
+      data: {
+        datasets: [{
+          data: [
+            17,59,139,212,395
+          ],
+          backgroundColor: colorset,
+          label: 'Dataset 1'
+        }],
+        labels: pielabels
+      },
+      options: {
+        responsive: true,
+        title: {
+            display: true,
+            text: '银教授转发人关注数区间'
+          }
+      }
+    });
+      var ctx2 = document.getElementById('canvaspie_ys').getContext('2d');
+      window.myPie2 = new Chart(ctx2, {
+      type: 'pie',
+      data: {
+        datasets: [{
+          data: [
+            234,270,234,298,387
+          ],
+          backgroundColor: colorset,
+          label: 'Dataset 1'
+        }],
+        labels: pielabels
+      },
+      options: {
+        responsive: true,
+        title: {
+            display: true,
+            text: '央视新闻转发人粉丝数区间'
+          }
+      }
+    });
+      var ctx2 = document.getElementById('canvaspiefollow_ys').getContext('2d');
+      window.myPie2 = new Chart(ctx2, {
+      type: 'pie',
+      data: {
+        datasets: [{
+          data: [
+            110,207,214,325,567
+          ],
+          backgroundColor: colorset,
+          label: 'Dataset 1'
+        }],
+        labels: pielabels
+      },
+      options: {
+        responsive: true,
+        title: {
+            display: true,
+            text: '央视新闻转发人关注数区间'
+          }
+      }
+    });
+      var ctx2 = document.getElementById('canvaspie_kk').getContext('2d');
+      window.myPie2 = new Chart(ctx2, {
+      type: 'pie',
+      data: {
+        datasets: [{
+          data: [
+            968,91,23,11,23
+          ],
+          backgroundColor: colorset,
+          label: 'Dataset 1'
+        }],
+        labels: pielabels
+      },
+      options: {
+        responsive: true,
+        title: {
+            display: true,
+            text: '蔡徐坤转发人粉丝数区间'
+          }
+      }
+    });
+      var ctx2 = document.getElementById('canvaspiefollow_kk').getContext('2d');
+      window.myPie2 = new Chart(ctx2, {
+      type: 'pie',
+      data: {
+        datasets: [{
+          data: [
+            489,427,130,41,29
+          ],
+          backgroundColor: colorset,
+          label: 'Dataset 1'
+        }],
+        labels: pielabels
+      },
+      options: {
+        responsive: true,
+        title: {
+            display: true,
+            text: '蔡徐坤转发人关注数区间'
+          }
+      }
+    });
+      // var ctx = document.getElementById('canvaspiefollow_yjs').getContext('2d');
+      // config.options.title.text = '银教授转发人关注数区间'
+      // config.data.datasets[0].data = [73,214,287,633,943]
+      // window.myPie = new Chart(ctx, config);
+      var ctx = document.getElementById('canvas').getContext('2d');
+      window.myBar = new Chart(ctx, {
+        type: 'bar',
+        data: barChartData,
+        options: {
+          responsive: true,
+          legend: {
+            position: 'top',
+          },
+          
+          title: {
+            display: true,
+            text: '转发男女比例'
+          }
+        }
+      });
+     var ctx = document.getElementById('canvas1').getContext('2d');
+      window.myBar = new Chart(ctx, {
+        type: 'bar',
+        data: barChartDatar,
+        options: {
+          title: {
+            display: true,
+            text: '转发客户端占比'
+          },
+          tooltips: {
+            mode: 'index',
+            intersect: false
+          },
+          responsive: true,
+          scales: {
+            xAxes: [{
+              stacked: true,
+            }],
+            yAxes: [{
+              stacked: true
+            }]
+          }
+        }
+      });
+
+    };
+
+    
+  </script>
+</body>
+
+</html>

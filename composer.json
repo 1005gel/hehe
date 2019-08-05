@@ -1,0 +1,7 @@
+{
+    "require": {
+        "jaeger/querylist": "^4.1",
+        "doctrine/orm": "^2.6",
+        "twig/twig": "^2.0"
+    }
+}
