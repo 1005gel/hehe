@@ -14,15 +14,21 @@ if (!isset($title[$type])) {
 	echo "没有这个热搜分类";
 	exit();
 }
-
+$arrContextOptions=array(
+    "ssl"=>array(
+        "verify_peer"=>false,
+        "verify_peer_name"=>false,
+    ),
+);
+$arrContextOptions = stream_context_create($arrContextOptions);
 $time = time()-1800;
-$data= @file_get_contents_curl($resource);
+$data= @file_get_contents($resource,false,$arrContextOptions);
 $filetime = @filemtime($resource);
 if ($time>$filetime) {
 	$data = false;
 }
 if ((isset($_GET['update'])&&$_GET['update']==1)||!$data) {
-	$data = file_get_contents_curl(HOT_URL[$type]);
+	$data = file_get_contents(HOT_URL[$type],false,$arrContextOptions);
 	file_put_contents($resource, $data);
 }
 $data = json_decode($data,true);
