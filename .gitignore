@@ -4,3 +4,4 @@ data/*
 .idea/
 composer.lock
 package-lock.json
+*.log

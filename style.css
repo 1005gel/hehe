@@ -1,0 +1,117 @@
+    html {
+  height: 100%;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  font-family: Avenir;
+}
+
+.userRanking a {
+  color: black;
+  text-decoration: none;
+}
+.userRanking a:hover {
+  background-color: #f5f5f5;
+}
+
+.dailyUserRanking-title {
+  height: 30px;
+  margin-bottom: 15px;
+}
+.dailyUserRanking-title span {
+  font-size: 28px;
+}
+.dailyUserRanking-title .dailyUserRanking-heading {
+  display: inline-block;
+  line-height: 30px;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.userRanking-list {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-content: space-between;
+  width: 1040px;
+  height: 400px;
+}
+
+.userRanking-item a {
+  display: flex;
+  align-items: center;
+  width: 345px;
+  height: 40px;
+  border-top: solid 1px #ccc;
+  border-bottom: solid 1px #ccc;
+  box-sizing: border-box;
+  margin-bottom: -1px;
+}
+.userRanking-item:nth-child(-n+3) .userRanking-item-rank {
+  background-color: #c00;
+}
+
+.userRanking-item-rank {
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  line-height: 30px;
+  font-size: 13px;
+  color: white;
+  background-color: black;
+}
+
+.userRanking-item-thumb {
+  margin-left: 8px;
+}
+.userRanking-item-thumb img {
+  width: 24px;
+  height: 24px;
+}
+
+.userRanking-item-name {
+  margin-left: 8px;
+  font-size: 13px;
+}
+
+.userRanking-item-view {
+  margin-left: auto;
+}
+.userRanking-item-view .userRanking-item-view-title {
+  display: inline-block;
+  font-size: 10px;
+}
+.userRanking-item-view .userRanking-item-view-number {
+  display: inline-block;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.dailyUserRanking-more {
+  display: flex;
+  align-items: center;
+  width: 55px;
+  height: 22px;
+  margin-top: 20px;
+  margin-left: auto;
+  background-color: black;
+}
+.dailyUserRanking-more:hover {
+  background-color: #333;
+}
+.dailyUserRanking-more span {
+  margin-left: 8px;
+  font-size: 2px;
+  color: white;
+}
+.dailyUserRanking-more p {
+  margin-left: 6px;
+  font-size: 12px;
+  color: white;
+}

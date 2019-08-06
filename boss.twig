@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="zh" >
 <head>
   <meta charset="UTF-8">
-  <title>热搜|抖音</title>
+  <title>来点品位|{{title}}热搜</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
 <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css'>
+<link rel="stylesheet" href="./style.css">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 <script>
   (adsbygoogle = window.adsbygoogle || []).push({
@@ -23,123 +24,7 @@
 </script>
 
 <style type="text/css">
-	html {
-  height: 100%;
-}
 
-body {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-  width: 100%;
-  font-family: Avenir;
-}
-
-.userRanking a {
-  color: black;
-  text-decoration: none;
-}
-.userRanking a:hover {
-  background-color: #f5f5f5;
-}
-
-.dailyUserRanking-title {
-  height: 30px;
-  margin-bottom: 15px;
-}
-.dailyUserRanking-title span {
-  font-size: 28px;
-}
-.dailyUserRanking-title .dailyUserRanking-heading {
-  display: inline-block;
-  line-height: 30px;
-  font-size: 16px;
-  font-weight: bold;
-}
-
-.userRanking-list {
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-content: space-between;
-  width: 1040px;
-  height: 400px;
-}
-
-.userRanking-item a {
-  display: flex;
-  align-items: center;
-  width: 345px;
-  height: 40px;
-  border-top: solid 1px #ccc;
-  border-bottom: solid 1px #ccc;
-  box-sizing: border-box;
-  margin-bottom: -1px;
-}
-.userRanking-item:nth-child(-n+3) .userRanking-item-rank {
-  background-color: #c00;
-}
-
-.userRanking-item-rank {
-  width: 30px;
-  height: 30px;
-  text-align: center;
-  line-height: 30px;
-  font-size: 13px;
-  color: white;
-  background-color: black;
-}
-
-.userRanking-item-thumb {
-  margin-left: 8px;
-}
-.userRanking-item-thumb img {
-  width: 24px;
-  height: 24px;
-}
-
-.userRanking-item-name {
-  margin-left: 8px;
-  font-size: 13px;
-}
-
-.userRanking-item-view {
-  margin-left: auto;
-}
-.userRanking-item-view .userRanking-item-view-title {
-  display: inline-block;
-  font-size: 10px;
-}
-.userRanking-item-view .userRanking-item-view-number {
-  display: inline-block;
-  font-size: 14px;
-  font-weight: bold;
-}
-
-.dailyUserRanking-more {
-  display: flex;
-  align-items: center;
-  width: 55px;
-  height: 22px;
-  margin-top: 20px;
-  margin-left: auto;
-  background-color: black;
-}
-.dailyUserRanking-more:hover {
-  background-color: #333;
-}
-.dailyUserRanking-more span {
-  margin-left: 8px;
-  font-size: 2px;
-  color: white;
-}
-.dailyUserRanking-more p {
-  margin-left: 6px;
-  font-size: 12px;
-  color: white;
-}
 </style>
 </head>
 <body>
@@ -147,7 +32,7 @@ body {
 
 <div class="dailyUserRanking">
   <div class="dailyUserRanking-title"><span class="fa fa-arrow-up"></span>
-    <h3 class="dailyUserRanking-heading">Daily user ranking</h3>
+    <h3 class="dailyUserRanking-heading">{{title}} ranking</h3>
   </div>
   <div class="dailyUserRanking-content">
     <div class="userRanking">
@@ -167,7 +52,10 @@ body {
       </ul>
     </div>
   </div>
-  <!-- <a class="dailyUserRanking-more" href="http://example.com"><span class="fa fa-caret-right"></span><p>More</p></a> -->
+  <a href="./index.php"><span class="fa fa-caret-right"></span>抖音</a>
+  <a href="./index.php?type=weibo"><span class="fa fa-caret-right"></span>微博</a>
+  <a href="./index.php?type=douban"><span class="fa fa-caret-right"></span>豆瓣</a>
+  <a href="./index.php?type=toutiao"><span class="fa fa-caret-right"></span>头条</a>
 </div>
 <!-- partial -->
   

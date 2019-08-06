@@ -7,16 +7,30 @@ $twig = new Twig_Environment($loader, array(
     'cache' => false,
     'autoescape'=>'html',
 ));
-$resource = "douyin.log"
-if ($_GET['update']==1) {
-	$data = file_get_contents(HOT_URL);
-	file_put_contents($resource, $data);
-}else{
-	$data= file_get_contents($resource);
+$title = ['douyin'=>'抖音','weibo'=>'微博','toutiao'=>'头条','douban'=>'豆瓣'];
+$type = isset($_GET['type']) ? $_GET['type'] : "douyin";
+$resource = $type.".log";
+if (!isset($title[$type])) {
+	echo "没有这个热搜分类";
+	exit();
 }
-
+$time = time()-1800;
+$data= @file_get_contents($resource);
+$filetime = @filemtime($resource);
+if ($time>$filetime) {
+	$data = false;
+}
+if ((isset($_GET['update'])&&$_GET['update']==1)||!$data) {
+	$data = file_get_contents(HOT_URL[$type]);
+	file_put_contents($resource, $data);
+}
 $data = json_decode($data,true);
+foreach ($data as $key => $val) {
+	if ($key>29) {
+		unset($data[$key]);
+	}
+}
 //var_dump($data,true);
 //file_put_contents("douyin.log", $aa);
 
-echo $twig->render('boss.twig', array('data' => $data));
+echo $twig->render('boss.twig', array('data' => $data,'title'=> $title[$type]));
