@@ -14,14 +14,15 @@ if (!isset($title[$type])) {
 	echo "没有这个热搜分类";
 	exit();
 }
+
 $time = time()-1800;
-$data= @file_get_contents($resource);
+$data= @file_get_contents_curl($resource);
 $filetime = @filemtime($resource);
 if ($time>$filetime) {
 	$data = false;
 }
 if ((isset($_GET['update'])&&$_GET['update']==1)||!$data) {
-	$data = file_get_contents(HOT_URL[$type]);
+	$data = file_get_contents_curl(HOT_URL[$type]);
 	file_put_contents($resource, $data);
 }
 $data = json_decode($data,true);
